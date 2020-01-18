@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Сергей Бычков](https://up.htmlacademy.ru/javascript/19/user/1073979).
-* Наставник: `Неизвестно`.
+* Наставник: [Дарья Клюхина](https://htmlacademy.ru/profile/id125399).
 
 ---
 
