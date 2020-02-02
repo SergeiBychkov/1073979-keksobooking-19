@@ -7,9 +7,11 @@ var ads = [];
 var similarAddPinTemplate = document.querySelector('#pin')
 .content
 .querySelector('.map__pin');
-var numberPhoto = 0;
-
 var pinsList = document.querySelector('.map__pins');
+var numberPhoto = 0;
+var mapPinMain = document.querySelector('.map__pin--main');
+var mapPinWidth = mapPinMain.offsetWidth;
+var mapPinHeight = mapPinMain.offsetHeight;
 
 var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
@@ -36,8 +38,8 @@ var creationOfParameters = function () {
       photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
     },
     location: {
-      x: getRandomIntInclusive(0, 1200),
-      y: getRandomIntInclusive(130, 630)
+      x: (getRandomIntInclusive(0, 1200)) - mapPinWidth,
+      y: (getRandomIntInclusive(130, 630)) - mapPinHeight
     }
   });
 };
