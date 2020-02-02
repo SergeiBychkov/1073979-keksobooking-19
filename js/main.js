@@ -38,8 +38,8 @@ var creationOfParameters = function () {
       photos: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
     },
     location: {
-      x: (getRandomIntInclusive(0, 1200)) - mapPinWidth,
-      y: (getRandomIntInclusive(130, 630)) - mapPinHeight
+      x: (getRandomIntInclusive(0, 1200)) - mapPinWidth / 2,
+      y: (getRandomIntInclusive(130, 630)) - mapPinHeight / 2
     }
   });
 };
@@ -61,8 +61,8 @@ var renderPin = function (parameter) {
 
 var fragment = document.createDocumentFragment();
 
-for (var i = 0; i < ADS_NUMBER; i++) {
-  fragment.appendChild(renderPin(ads[i]));
-}
+ads.forEach(function callback(currentValue) {
+  fragment.appendChild(renderPin(currentValue));
+});
 
 pinsList.appendChild(fragment);
