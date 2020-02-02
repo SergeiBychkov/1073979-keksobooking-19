@@ -54,5 +54,3 @@ pinCreate.querySelector('img').setAttribute('src', author.avatar);
 pinCreate.querySelector('img').setAttribute('alt', offer.title);
 return pinCreate;
 };
-
-console.log(renderPin());
