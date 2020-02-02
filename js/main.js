@@ -39,7 +39,7 @@ var creationOfParameters = function () {
     },
     location: {
       x: (getRandomIntInclusive(0, 1200)) - mapPinWidth / 2,
-      y: (getRandomIntInclusive(130, 630)) - mapPinHeight / 2
+      y: (getRandomIntInclusive(130, 630)) - mapPinHeight
     }
   });
 };
