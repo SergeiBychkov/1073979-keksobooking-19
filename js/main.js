@@ -2,12 +2,14 @@
 
 var ADS_NUMBER = 8;
 var titles = ['Уютное гнездышко для молодоженов', 'Маленькая квартирка рядом с парком', 'Императорский дворец в центре Токио', 'Милейший чердачок', 'Небольшая лавочка в парке', 'Наркоманский притон'];
-var typeOfBuilding = ['place', 'flat', 'house', 'bungalo'];
 var ads = [];
 var similarAddPinTemplate = document.querySelector('#pin')
 .content
 .querySelector('.map__pin');
-var pinsList = document.querySelector('.map__pins');
+var mapPins = document.querySelector('.map__pins');
+var card = document.querySelector('#card')
+.content
+.querySelector('.map__card');
 var numberPhoto = 0;
 var mapPinMain = document.querySelector('.map__pin--main');
 var mapPinWidth = mapPinMain.offsetWidth;
@@ -28,7 +30,12 @@ var creationOfParameters = function () {
       title: titles[getRandomIntInclusive(0, titles.length)],
       adress: '600, 350',
       price: 42000,
-      type: typeOfBuilding[getRandomIntInclusive(0, typeOfBuilding.length)],
+      type: {
+        flat: 'квартира',
+        bungalo: 'Бунгало',
+        house: 'Дом',
+        palace: 'Дворец'
+      },
       rooms: 3,
       guests: 2,
       checkin: '12:00',
@@ -59,10 +66,30 @@ var renderPin = function (parameter) {
   return pinCreate;
 };
 
-var fragment = document.createDocumentFragment();
+var renderAd = function (parameter) {
+  var adCreate = card.cloneNode(true);
 
-ads.forEach(function callback(currentValue) {
+  adCreate.querySelector('.popup__title').textContent = parameter.offer.title;
+  adCreate.querySelector('.popup__text--address').textContent = parameter.offer.adress;
+  adCreate.querySelector('.popup__text--price').textContent = parameter.offer.price + '₽/ночь';
+  adCreate.querySelector('.popup__type').textContent = parameter.offer.type.house;
+  adCreate.querySelector('.popup__text--capacity').textContent = parameter.offer.rooms + ' комнаты для ' + parameter.offer.guests + ' гостей';
+  adCreate.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ' , выезд до ' + parameter.offer.checkout;
+  adCreate.querySelector('.popup__description').textContent = parameter.offer.description;
+  adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[0]);
+  adCreate.querySelector('.popup__avatar').setAttribute('src', parameter.author.avatar);
+  return adCreate;
+};
+
+var fragment = document.createDocumentFragment();
+var fragmentCard = document.createDocumentFragment();
+
+fragmentCard.appendChild(renderAd(ads[0]));
+
+ads.forEach(function (currentValue) {
   fragment.appendChild(renderPin(currentValue));
 });
 
-pinsList.appendChild(fragment);
+mapPins.appendChild(fragment);
+mapPins.appendChild(fragmentCard);
+
