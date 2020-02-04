@@ -2,6 +2,13 @@
 
 var ADS_NUMBER = 8;
 var titles = ['Уютное гнездышко для молодоженов', 'Маленькая квартирка рядом с парком', 'Императорский дворец в центре Токио', 'Милейший чердачок', 'Небольшая лавочка в парке', 'Наркоманский притон'];
+var types = ['flat', 'bungalo', 'house', 'palace'];
+var typeOfBuilding = {
+  flat: 'Квартира',
+  bungalo: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец'
+};
 var ads = [];
 var similarAddPinTemplate = document.querySelector('#pin')
 .content
@@ -30,12 +37,7 @@ var creationOfParameters = function () {
       title: titles[getRandomIntInclusive(0, titles.length)],
       adress: '600, 350',
       price: 42000,
-      type: {
-        flat: 'квартира',
-        bungalo: 'Бунгало',
-        house: 'Дом',
-        palace: 'Дворец'
-      },
+      type: types[getRandomIntInclusive(0, types.length)],
       rooms: 3,
       guests: 2,
       checkin: '12:00',
@@ -72,12 +74,13 @@ var renderAd = function (parameter) {
   adCreate.querySelector('.popup__title').textContent = parameter.offer.title;
   adCreate.querySelector('.popup__text--address').textContent = parameter.offer.adress;
   adCreate.querySelector('.popup__text--price').textContent = parameter.offer.price + '₽/ночь';
-  adCreate.querySelector('.popup__type').textContent = parameter.offer.type.house;
+  adCreate.querySelector('.popup__type').textContent = typeOfBuilding[parameter.offer.type];
   adCreate.querySelector('.popup__text--capacity').textContent = parameter.offer.rooms + ' комнаты для ' + parameter.offer.guests + ' гостей';
   adCreate.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ' , выезд до ' + parameter.offer.checkout;
   adCreate.querySelector('.popup__description').textContent = parameter.offer.description;
   adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[0]);
   adCreate.querySelector('.popup__avatar').setAttribute('src', parameter.author.avatar);
+
   return adCreate;
 };
 
