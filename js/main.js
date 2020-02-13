@@ -29,12 +29,8 @@ var mainForm = document.querySelector('.ad-form');
 var formSelect = document.querySelectorAll('.map__filter');
 var formFieldset = document.querySelectorAll('fieldset');
 var formAdress = mainForm.querySelector('#address');
-var roomSelect = document.querySelector('#room_number');
-var rooms = mainForm.querySelector('#room_number')
-.querySelector('[selected]');
-var capacity = mainForm.querySelector('#capacity')
-.querySelector('[selected]');
-
+var roomSelect = mainForm.querySelector('#room_number');
+var capacitySelect = mainForm.querySelector('#capacity');
 var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -143,8 +139,10 @@ var changePageState = function () {
 };
 
 var checkValue = function () {
-  if (rooms.value !== capacity.value) {
-    roomSelect.setCustomValidity('мало комнат, много людей');
+  if (roomSelect.value !== capacitySelect.value) {
+    roomSelect.setCustomValidity('недопустимое значение');
+  } else {
+    roomSelect.setCustomValidity('');
   }
 };
 
@@ -165,3 +163,8 @@ mapPinMain.addEventListener('keydown', function (evt) {
 roomSelect.addEventListener('change', function () {
   checkValue();
 });
+
+capacitySelect.addEventListener('change', function () {
+  checkValue();
+});
+
