@@ -3,46 +3,53 @@
 var ADS_NUMBER = 8;
 var ENTER_KEY = 'Enter';
 var LMB = 1;
+var ESC = 'Escape';
 
 var titles = ['Уютное гнездышко для молодоженов', 'Маленькая квартирка рядом с парком', 'Императорский дворец в центре Токио', 'Милейший чердачок', 'Небольшая лавочка в парке', 'Наркоманский притон'];
 var types = ['flat', 'bungalo', 'house', 'palace'];
-// отрисовка карточки var typeOfBuilding = {
-//   flat: 'Квартира',
-//   bungalo: 'Бунгало',
-//   house: 'Дом',
-//   palace: 'Дворец'
-// };
+var typeOfBuilding = {
+  flat: {
+    name: 'Квартира',
+    price: '1000'
+  },
+  bungalo: {
+    name: 'Бунгало',
+    price: '0'
+  },
+  house: {
+    name: 'Дом',
+    price: '5000'
+  },
+  palace: {
+    name: 'Дворец',
+    price: '10000'
+  }
+};
 var ads = [];
-var similarAddPinTemplate = document.querySelector('#pin')
-.content
-.querySelector('.map__pin');
+var similarAddPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPins = document.querySelector('.map__pins');
-// отрисовка карточки var card = document.querySelector('#card')
-// .content
-// .querySelector('.map__card');
+var card = document.querySelector('#card');
+var popup = card.content.querySelector('.popup');
 var numberPhoto = 0;
-var mapPinMain = document.querySelector('.map__pin--main');
+var mapPinMain = mapPins.querySelector('.map__pin--main');
 var mapPinWidth = mapPinMain.offsetWidth;
 var mapPinHeight = mapPinMain.offsetHeight;
 var map = document.querySelector('.map');
+var mapFiltersContainer = map.querySelector('.map__filters-container');
 var mainForm = document.querySelector('.ad-form');
 var formSelect = document.querySelectorAll('.map__filter');
 var formFieldset = document.querySelectorAll('fieldset');
-var formAdress = mainForm.querySelector('#address');
+var typeSelect = mainForm.querySelector('#type');
+var priceInput = mainForm.querySelector('#price');
 var roomSelect = mainForm.querySelector('#room_number');
 var capacitySelect = mainForm.querySelector('#capacity');
+var formAdress = mainForm.querySelector('#address');
+var timein = mainForm.querySelector('#timein');
+var timeout = mainForm.querySelector('#timeout');
 var getRandomIntInclusive = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
-};
-
-var getCoords = function (elem) {
-  var box = elem.getBoundingClientRect();
-  return {
-    top: Math.round(box.top + pageYOffset),
-    left: Math.round(box.left + pageXOffset)
-  };
 };
 
 var creationOfParameters = function () {
@@ -69,6 +76,19 @@ var creationOfParameters = function () {
     }
   });
 };
+var addingCard = function (data) {
+  var fragmentCard = document.createDocumentFragment();
+  var ad = renderAd(data);
+  fragmentCard.appendChild(ad);
+  map.insertBefore(fragmentCard, mapFiltersContainer);
+  document.addEventListener('keydown', onEscPress);
+};
+var removeCard = function () {
+  var currMap = document.querySelector('.map');
+  var cardPopup = currMap.querySelector('.popup');
+  currMap.removeChild(cardPopup);
+  document.removeEventListener('keydown', onEscPress);
+};
 
 for (var index = 0; index < ADS_NUMBER; index++) {
   creationOfParameters();
@@ -80,51 +100,53 @@ var renderPin = function (parameter) {
   pinCreate.style = 'left:' + parameter.location.x + 'px; top:' + parameter.location.y + 'px;';
   pinCreate.querySelector('img').setAttribute('src', parameter.author.avatar);
   pinCreate.querySelector('img').setAttribute('alt', parameter.offer.title);
+
+  pinCreate.addEventListener('click', function () {
+    if (!pinCreate.matches('.map__pin--main')) {
+      if (document.querySelector('.popup')) {
+        removeCard();
+      }
+      addingCard(parameter);
+    }
+  });
   return pinCreate;
 };
 
-// отрисовка карточки var renderAd = function (parameter) {
-// отрисовка карточки   var adCreate = card.cloneNode(true);
+var renderAd = function (parameter) {
+  var adCreate = popup.cloneNode(true);
 
-// отрисовка карточки   adCreate.querySelector('.popup__title').textContent = parameter.offer.title;
-//   adCreate.querySelector('.popup__text--address').textContent = parameter.offer.adress;
-//   adCreate.querySelector('.popup__text--price').textContent = parameter.offer.price + '₽/ночь';
-//   adCreate.querySelector('.popup__type').textContent = typeOfBuilding[parameter.offer.type];
-//   adCreate.querySelector('.popup__text--capacity').textContent = parameter.offer.rooms + ' комнаты для ' + parameter.offer.guests + ' гостей';
-//   adCreate.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ' , выезд до ' + parameter.offer.checkout;
-//   adCreate.querySelector('.popup__description').textContent = parameter.offer.description;
-//   adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[0]);
-//   adCreate.querySelector('.popup__avatar').setAttribute('src', parameter.author.avatar);
+  adCreate.querySelector('.popup__title').textContent = parameter.offer.title;
+  adCreate.querySelector('.popup__text--address').textContent = parameter.offer.adress;
+  adCreate.querySelector('.popup__text--price').textContent = parameter.offer.price + '₽/ночь';
+  adCreate.querySelector('.popup__type').textContent = typeOfBuilding[parameter.offer.type];
+  adCreate.querySelector('.popup__text--capacity').textContent = parameter.offer.rooms + ' комнаты для ' + parameter.offer.guests + ' гостей';
+  adCreate.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ' , выезд до ' + parameter.offer.checkout;
+  adCreate.querySelector('.popup__description').textContent = parameter.offer.description;
+  adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[0]);
+  adCreate.querySelector('.popup__avatar').setAttribute('src', parameter.author.avatar);
 
-//   return adCreate;
-// };
+  var buttonClose = adCreate.querySelector('.popup__close');
+  buttonClose.addEventListener('click', removeCard);
+  return adCreate;
+};
 
 var fragment = document.createDocumentFragment();
-// отрисовка карточки var fragmentCard = document.createDocumentFragment();
 
-// отрисовка карточки fragmentCard.appendChild(renderAd(ads[0]));
+var onEscPress = function (evt) {
+  if (evt.key === ESC) {
+    removeCard();
+  }
+};
 
 ads.forEach(function (currentValue) {
   fragment.appendChild(renderPin(currentValue));
+
 });
 
-// отрисовка карточки mapPins.appendChild(fragmentCard);
 
-var pinCoords = getCoords(mapPinMain);
-
-formAdress.value = pinCoords.left + Math.round(mapPinWidth / 2) + ' px по горизонтали ' + (pinCoords.top + mapPinHeight) + ' px по вертикали';
+formAdress.value = mapPinMain.offsetLeft + Math.round(mapPinWidth / 2) + ' px по горизонтали ' + (mapPinMain.offsetTop + mapPinHeight) + ' px по вертикали';
 
 // хэндлеры
-
-if (map.classList.contains('map--faded')) {
-  for (var l = 0; l < formSelect.length; l++) {
-    formSelect[l].disabled = true;
-  }
-  for (var n = 0; n < formFieldset.length; n++) {
-    formFieldset[n].disabled = true;
-  }
-}
-
 var changePageState = function () {
   map.classList.remove('map--faded');
   mapPins.appendChild(fragment);
@@ -138,6 +160,15 @@ var changePageState = function () {
   }
 };
 
+var setparameters = function (price) {
+  priceInput.setAttribute('min', price);
+  priceInput.setAttribute('placeholder', price);
+};
+
+var checkType = function () {
+  setparameters(typeOfBuilding[typeSelect.value].price);
+};
+
 var checkValue = function () {
   if (roomSelect.value !== capacitySelect.value) {
     roomSelect.setCustomValidity('недопустимое значение');
@@ -146,7 +177,36 @@ var checkValue = function () {
   }
 };
 
+var checkTime = function (timeIn, timeOut) {
+  if (timeIn.value !== timeOut.value) {
+    timeOut.value = timeIn.value;
+  }
+};
+
+if (map.classList.contains('map--faded')) {
+  for (var l = 0; l < formSelect.length; l++) {
+    formSelect[l].disabled = true;
+  }
+  for (var n = 0; n < formFieldset.length; n++) {
+    formFieldset[n].disabled = true;
+  }
+}
+
+timein.addEventListener('change', function () {
+  checkTime(timein, timeout);
+});
+
+timeout.addEventListener('change', function () {
+  checkTime(timeout, timein);
+});
+
 checkValue();
+
+checkType();
+
+typeSelect.addEventListener('change', function () {
+  checkType();
+});
 
 mapPinMain.addEventListener('mousedown', function (evt) {
   if (evt.which === LMB) {
@@ -167,4 +227,3 @@ roomSelect.addEventListener('change', function () {
 capacitySelect.addEventListener('change', function () {
   checkValue();
 });
-
