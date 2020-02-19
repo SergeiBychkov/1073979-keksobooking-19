@@ -11,8 +11,6 @@
   var formFieldset = document.querySelectorAll('fieldset');
   var formSelect = document.querySelectorAll('.map__filter');
   var roomSelect = mainForm.querySelector('#room_number');
-  var priceInput = mainForm.querySelector('#price');
-  var typeSelect = mainForm.querySelector('#type');
   var capacitySelect = mainForm.querySelector('#capacity');
   var timein = mainForm.querySelector('#timein');
   var timeout = mainForm.querySelector('#timeout');
@@ -36,15 +34,6 @@
     for (var w = 0; w < formFieldset.length; w++) {
       formFieldset[w].disabled = false;
     }
-  };
-
-  var setparameters = function (price) {
-    priceInput.setAttribute('min', price);
-    priceInput.setAttribute('placeholder', price);
-  };
-
-  var checkType = function () {
-    setparameters(window.data.typeOfBuilding[typeSelect.value].price);
   };
 
   var checkValue = function () {
@@ -79,12 +68,6 @@
   });
 
   checkValue();
-
-  checkType();
-
-  typeSelect.addEventListener('change', function () {
-    checkType();
-  });
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     if (evt.which === window.data.LMB) {
