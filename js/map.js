@@ -16,7 +16,7 @@
   var timeout = mainForm.querySelector('#timeout');
 
   var onEscPress = function (evt) {
-    if (evt.key === window.DataCue.ESC) {
+    if (evt.key === window.constants.ESC) {
       window.card.removeCard();
     }
   };
@@ -70,13 +70,13 @@
   checkValue();
 
   mapPinMain.addEventListener('mousedown', function (evt) {
-    if (evt.which === window.data.LMB) {
+    if (evt.which === window.constants.LMB) {
       changePageState();
     }
   });
 
   mapPinMain.addEventListener('keydown', function (evt) {
-    if (evt.key === window.data.ENTER_KEY) {
+    if (evt.key === window.constants.ENTER_KEY) {
       changePageState();
     }
   });

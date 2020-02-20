@@ -11,7 +11,7 @@
   };
 
   var checkType = function () {
-    setparameters(window.data.typeOfBuilding[typeSelect.value].price);
+    setparameters(window.database.typeOfBuilding[typeSelect.value].price);
   };
 
   checkType();

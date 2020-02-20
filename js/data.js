@@ -1,31 +1,6 @@
 'use strict';
 
 (function () {
-  var ADS_NUMBER = 8;
-  var ENTER_KEY = 'Enter';
-  var ESC = 'Escape';
-  var LMB = 1;
-
-  var titles = ['Уютное гнездышко для молодоженов', 'Маленькая квартирка рядом с парком', 'Императорский дворец в центре Токио', 'Милейший чердачок', 'Небольшая лавочка в парке', 'Наркоманский притон'];
-  var types = ['flat', 'bungalo', 'house', 'palace'];
-  var typeOfBuilding = {
-    flat: {
-      name: 'Квартира',
-      price: '1000'
-    },
-    bungalo: {
-      name: 'Бунгало',
-      price: '0'
-    },
-    house: {
-      name: 'Дом',
-      price: '5000'
-    },
-    palace: {
-      name: 'Дворец',
-      price: '10000'
-    }
-  };
   var numberPhoto = 0;
   var mapPins = document.querySelector('.map__pins');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
@@ -45,10 +20,10 @@
         avatar: 'img/avatars/user0' + (numberPhoto += 1) + '.png'
       },
       offer: {
-        title: titles[getRandomIntInclusive(0, titles.length)],
+        title: window.database.titles[getRandomIntInclusive(0, window.database.titles.length)],
         adress: '600, 350',
         price: 42000,
-        type: types[getRandomIntInclusive(0, types.length)],
+        type: window.database.types[getRandomIntInclusive(0, window.database.types.length)],
         rooms: 3,
         guests: 2,
         checkin: '12:00',
@@ -64,15 +39,11 @@
     });
   };
 
-  for (var index = 0; index < ADS_NUMBER; index++) {
+  for (var index = 0; index < window.constants.ADS_NUMBER; index++) {
     creationOfParameters();
   }
 
   window.data = {
-    ENTER_KEY: ENTER_KEY,
-    ESC: ESC,
-    LMB: LMB,
-    typeOfBuilding: typeOfBuilding,
     ads: ads
   };
 })();
