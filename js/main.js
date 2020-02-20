@@ -76,6 +76,11 @@ var creationOfParameters = function () {
     }
   });
 };
+
+for (var index = 0; index < ADS_NUMBER; index++) {
+  creationOfParameters();
+}
+
 var addingCard = function (data) {
   var fragmentCard = document.createDocumentFragment();
   var ad = renderAd(data);
@@ -89,10 +94,6 @@ var removeCard = function () {
   currMap.removeChild(cardPopup);
   document.removeEventListener('keydown', onEscPress);
 };
-
-for (var index = 0; index < ADS_NUMBER; index++) {
-  creationOfParameters();
-}
 
 var renderPin = function (parameter) {
   var pinCreate = similarAddPinTemplate.cloneNode(true);
@@ -118,7 +119,7 @@ var renderAd = function (parameter) {
   adCreate.querySelector('.popup__title').textContent = parameter.offer.title;
   adCreate.querySelector('.popup__text--address').textContent = parameter.offer.adress;
   adCreate.querySelector('.popup__text--price').textContent = parameter.offer.price + '₽/ночь';
-  adCreate.querySelector('.popup__type').textContent = typeOfBuilding[parameter.offer.type];
+  adCreate.querySelector('.popup__type').textContent = typeOfBuilding[parameter.offer.type].name;
   adCreate.querySelector('.popup__text--capacity').textContent = parameter.offer.rooms + ' комнаты для ' + parameter.offer.guests + ' гостей';
   adCreate.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ' , выезд до ' + parameter.offer.checkout;
   adCreate.querySelector('.popup__description').textContent = parameter.offer.description;
@@ -140,7 +141,6 @@ var onEscPress = function (evt) {
 
 ads.forEach(function (currentValue) {
   fragment.appendChild(renderPin(currentValue));
-
 });
 
 
