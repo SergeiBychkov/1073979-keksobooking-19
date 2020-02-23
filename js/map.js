@@ -34,6 +34,72 @@
     for (var w = 0; w < formFieldset.length; w++) {
       formFieldset[w].disabled = false;
     }
+
+    mapPinMain.addEventListener('mousedown', function (evt) {
+      evt.preventDefault();
+
+      var startCoords = {
+        x: evt.clientX,
+        y: evt.clientY
+      };
+
+      var dragged = false;
+
+      var onMouseMove = function (moveEvt) {
+        moveEvt.preventDefault();
+        dragged = true;
+
+        var shift = {
+          x: startCoords.x - moveEvt.clientX,
+          y: startCoords.y - moveEvt.clientY
+        };
+
+        startCoords = {
+          x: moveEvt.clientX,
+          y: moveEvt.clientY
+        };
+
+        var shiftCoordY = mapPinMain.offsetTop - shift.y;
+        var shiftCoordX = mapPinMain.offsetLeft - shift.x;
+
+        if (shiftCoordY < 130) {
+          mapPinMain.style.top = '130px';
+        }
+
+        if (shiftCoordY > (600 + mapPinHeight)) {
+          mapPinMain.style.top = 600 + mapPinHeight + 'px';
+        }
+
+        if (shiftCoordX < (0 - (mapPinWidth / 2))) {
+          mapPinMain.style.left = 0 - (mapPinWidth / 2) + 'px';
+        }
+
+        if (shiftCoordX > (1200 - (mapPinWidth / 2))) {
+          mapPinMain.style.left = 1200 - (mapPinWidth / 2) + 'px';
+        }
+
+        mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+        mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+        formAdress.value = (mapPinMain.offsetLeft - shift.x) + 'px по горизонтали ' + (mapPinMain.offsetTop - shift.y) + 'px по вертикали';
+      };
+
+      var onMouseUp = function (upEvt) {
+        upEvt.preventDefault();
+
+        mapPins.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+
+        if (dragged) {
+          var onClickPreventDefault = function (clickEvt) {
+            clickEvt.preventDefault();
+            mapPinMain.removeEventListener('click', onClickPreventDefault);
+          };
+          mapPinMain.addEventListener('click', onClickPreventDefault);
+        }
+      };
+      mapPins.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
   };
 
   var checkValue = function () {
