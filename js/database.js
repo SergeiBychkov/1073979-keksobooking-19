@@ -22,9 +22,17 @@
     }
   };
 
+  var mapLimit = {
+    top: 130,
+    right: 1200,
+    bottom: 630,
+    left: 0
+  };
+
   window.database = {
     titles: titles,
     types: types,
-    typeOfBuilding: typeOfBuilding
+    typeOfBuilding: typeOfBuilding,
+    mapLimit: mapLimit
   };
 })();

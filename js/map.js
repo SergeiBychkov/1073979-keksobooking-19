@@ -7,7 +7,6 @@
   var formAdress = mainForm.querySelector('#address');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
   var mapPinWidth = mapPinMain.offsetWidth;
-  var mapPinHeight = mapPinMain.offsetHeight;
   var formFieldset = document.querySelectorAll('fieldset');
   var formSelect = document.querySelectorAll('.map__filter');
   var roomSelect = mainForm.querySelector('#room_number');
@@ -64,16 +63,16 @@
       var shiftCoordX = mapPinMain.offsetLeft - shift.x;
 
 
-      if (shiftCoordY < 130) {
+      if (shiftCoordY < window.database.mapLimit.top) {
         mapPinMain.style.top = '130px';
-      } else if (shiftCoordY > (600 + (mapPinHeight / 2))) {
-        mapPinMain.style.top = 600 + (mapPinHeight / 2) + 'px';
+      } else if (shiftCoordY > window.database.mapLimit.bottom) {
+        mapPinMain.style.top = window.database.mapLimit.bottom + 'px';
       }
 
-      if (shiftCoordX < (0 - (mapPinWidth / 2))) {
-        mapPinMain.style.left = 0 - (mapPinWidth / 2) + 'px';
-      } else if (shiftCoordX > (1200 - (mapPinWidth / 2))) {
-        mapPinMain.style.left = 1200 - (mapPinWidth / 2) + 'px';
+      if (shiftCoordX < (window.database.mapLimit.left - (mapPinWidth / 2))) {
+        mapPinMain.style.left = window.database.mapLimit.left - (mapPinWidth / 2) + 'px';
+      } else if (shiftCoordX > (window.database.mapLimit.right - (mapPinWidth / 2))) {
+        mapPinMain.style.left = window.database.mapLimit.right - (mapPinWidth / 2) + 'px';
       }
 
       mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
