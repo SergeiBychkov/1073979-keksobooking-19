@@ -25,6 +25,6 @@
   window.database = {
     titles: titles,
     types: types,
-    typeOfBuilding: typeOfBuilding
+    typeOfBuilding: typeOfBuilding,
   };
 })();
