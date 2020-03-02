@@ -21,13 +21,7 @@
     return pinCreate;
   };
 
-  var fragment = document.createDocumentFragment();
-
-  window.data.ads.forEach(function (currentValue) {
-    fragment.appendChild(renderPin(currentValue));
-  });
-
   window.pin = {
-    fragment: fragment
+    renderPin: renderPin
   };
 })();

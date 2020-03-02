@@ -31,6 +31,24 @@
     adCreate.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ' , выезд до ' + parameter.offer.checkout;
     adCreate.querySelector('.popup__description').textContent = parameter.offer.description;
     adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[0]);
+    if (parameter.offer.photos.length === 0) {
+      adCreate.querySelector('.popup__photos').remove();
+    } else {
+      for (var i = 1; i < parameter.offer.photos.length; i++) {
+        var img = adCreate.querySelector('.popup__photo');
+        var imgClone = img.cloneNode();
+        adCreate.querySelector('.popup__photos').appendChild(imgClone);
+        adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[i]);
+      }
+
+      // parameter.forEach(function (currentValue) {
+      //   var img = adCreate.querySelector('.popup__photo');
+      //   var imgClone = img.cloneNode();
+      //   adCreate.querySelector('.popup__photos').appendChild(imgClone);
+      //   adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[currentValue]);
+      // });
+    }
+
     adCreate.querySelector('.popup__avatar').setAttribute('src', parameter.author.avatar);
 
     var buttonClose = adCreate.querySelector('.popup__close');

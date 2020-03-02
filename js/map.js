@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var quantityOfPins = 5;
   var mainForm = document.querySelector('.ad-form');
   var map = document.querySelector('.map');
   var mapPins = document.querySelector('.map__pins');
@@ -22,6 +23,18 @@
   var mapMinX = mapLimit.left - mapPinWidth / 2;
   var mapMaxX = mapLimit.right - mapPinWidth / 2;
 
+  var successHandler = function (parameter) {
+    var fragment = document.createDocumentFragment();
+    parameter = parameter.slice(0, quantityOfPins);
+
+    parameter.forEach(function (currentValue) {
+      fragment.appendChild(window.pin.renderPin(currentValue));
+      mapPins.appendChild(fragment);
+    });
+  };
+  var errorHandler = function () {
+    return null;
+  };
 
   var onEscPress = function (evt) {
     if (evt.key === window.constants.ESC) {
@@ -37,7 +50,6 @@
 
   var changePageState = function () {
     map.classList.remove('map--faded');
-    mapPins.appendChild(window.pin.fragment);
     mainForm.classList.remove('ad-form--disabled');
 
     for (var q = 0; q < formSelect.length; q++) {
@@ -46,6 +58,7 @@
     for (var w = 0; w < formFieldset.length; w++) {
       formFieldset[w].disabled = false;
     }
+    window.load(successHandler, errorHandler);
   };
 
   mapPinMain.addEventListener('mousedown', function (evt) {
@@ -71,7 +84,7 @@
 
       var shiftCoordY = mapPinMain.offsetTop - shift.y;
       var shiftCoordX = mapPinMain.offsetLeft - shift.x;
-      var checkCoords = function (min, max, current) {
+      var checkCoord = function (min, max, current) {
         if (current < min) {
           return min + 'px';
         } else if (current > max) {
@@ -81,8 +94,8 @@
         }
       };
 
-      mapPinMain.style.top = checkCoords(mapLimit.top, mapLimit.bottom, shiftCoordY);
-      mapPinMain.style.left = checkCoords(mapMinX, mapMaxX, shiftCoordX);
+      mapPinMain.style.top = checkCoord(mapLimit.top, mapLimit.bottom, shiftCoordY);
+      mapPinMain.style.left = checkCoord(mapMinX, mapMaxX, shiftCoordX);
       recordCoords();
     };
 
