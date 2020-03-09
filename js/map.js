@@ -4,20 +4,25 @@
   var quantityOfPins = 5;
   var main = document.querySelector('main');
   var mainForm = main.querySelector('.ad-form');
-  var formData = new FormData(mainForm);
   var map = main.querySelector('.map');
   var mapPins = main.querySelector('.map__pins');
   var formAdress = mainForm.querySelector('#address');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
   var mapPinWidth = mapPinMain.offsetWidth;
   var formFieldset = main.querySelectorAll('fieldset');
+  var mapForm = main.querySelector('.map__filters');
   var formSelect = main.querySelectorAll('.map__filter');
-  var roomSelect = mainForm.querySelector('#room_number');
-  var capacitySelect = mainForm.querySelector('#capacity');
-  var timein = mainForm.querySelector('#timein');
-  var timeout = mainForm.querySelector('#timeout');
   var mapMinX = window.database.mapLimit.left - mapPinWidth / 2;
   var mapMaxX = window.database.mapLimit.right - mapPinWidth / 2;
+
+  var changeFormavAilable = function (option) {
+    for (var q = 0; q < formSelect.length; q++) {
+      formSelect[q].disabled = option;
+    }
+    for (var w = 0; w < formFieldset.length; w++) {
+      formFieldset[w].disabled = option;
+    }
+  };
 
   // ф-ия при успешном сценарии загрузки данных
   var successHandler = function (parameter) {
@@ -34,8 +39,8 @@
   var onSuccessCloseField = function (evt) {
     if (evt.key === window.constants.ESC || evt.button === 0) {
       main.removeChild(document.querySelector('.success'));
-      document.removeEventListener('keydown', onErrorCloseField);
-      document.removeEventListener('click', onErrorCloseField);
+      document.removeEventListener('keydown', onSuccessCloseField);
+      document.removeEventListener('click', onSuccessCloseField);
     }
   };
 
@@ -45,12 +50,27 @@
     var succesCreate = successTemplate.cloneNode(true);
 
     document.addEventListener('keydown', onSuccessCloseField);
+    document.addEventListener('click', onSuccessCloseField);
     return succesCreate;
   };
 
-  // место под: ф-ия при успешной отправки формы
-  var successHandlerForm = function () {
-    main.appendChild(renderSuccessMessage);
+  // ф-ия при успешной отправки данных
+  var formSuccess = function () {
+    main.appendChild(renderSuccessMessage());
+    mapPinMain.style = window.constants.PIN_START_COORDS;
+    mainForm.reset();
+    mapForm.reset();
+    recordCoords();
+    map.classList.add('map--faded');
+    mainForm.classList.add('ad-form--disabled');
+    changeFormavAilable(true);
+    var buttons = mapPins.querySelectorAll('.map__pin');
+
+    for (var p = 0; p < buttons.length; p++) {
+      if (!buttons[p].matches('.map__pin--main')) {
+        mapPins.removeChild(buttons[p]);
+      }
+    }
   };
 
   // коллбэк на закрытие окна с ошибкой
@@ -101,18 +121,13 @@
     map.classList.remove('map--faded');
     mainForm.classList.remove('ad-form--disabled');
 
-    for (var q = 0; q < formSelect.length; q++) {
-      formSelect[q].disabled = false;
-    }
-    for (var w = 0; w < formFieldset.length; w++) {
-      formFieldset[w].disabled = false;
-    }
+    changeFormavAilable(false);
   };
 
   // слушатель на отправку данных формы
   mainForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(formData, successHandlerForm, renderErrorMesage);
+    window.upload(new FormData(mainForm), formSuccess, errorHandler);
   });
 
   // передвижение главного пина
@@ -163,41 +178,6 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  // ф-ия сравнения количества комнат и гостей
-  var checkValue = function () {
-    if (roomSelect.value !== capacitySelect.value) {
-      roomSelect.setCustomValidity('недопустимое значение');
-    } else {
-      roomSelect.setCustomValidity('');
-    }
-  };
-
-  // ф-ия сравнения времени заезда и выезда
-  var checkTime = function (timeIn, timeOut) {
-    if (timeIn.value !== timeOut.value) {
-      timeOut.value = timeIn.value;
-    }
-  };
-
-  if (map.classList.contains('map--faded')) {
-    for (var l = 0; l < formSelect.length; l++) {
-      formSelect[l].disabled = true;
-    }
-    for (var n = 0; n < formFieldset.length; n++) {
-      formFieldset[n].disabled = true;
-    }
-  }
-
-  timein.addEventListener('change', function () {
-    checkTime(timein, timeout);
-  });
-
-  timeout.addEventListener('change', function () {
-    checkTime(timeout, timein);
-  });
-
-  checkValue();
-
   // слушатель на изменение положения страницы по клику лкм на мейн пин
   mapPinMain.addEventListener('mousedown', function (evt) {
     if (evt.which === window.constants.LMB) {
@@ -212,14 +192,8 @@
     }
   });
 
-  roomSelect.addEventListener('change', function () {
-    checkValue();
-  });
-
-  capacitySelect.addEventListener('change', function () {
-    checkValue();
-  });
   window.map = {
-    onEscPress: onEscPress
+    onEscPress: onEscPress,
+    recordCoords: recordCoords
   };
 })();

@@ -35,7 +35,7 @@
 
     requestListener(xhr, onSuccess, onError);
 
-    xhr.open(requestMethod.upload.method, URL);
+    xhr.open(requestMethod.upload.method, requestMethod.upload.url);
     xhr.send(data);
   };
 
