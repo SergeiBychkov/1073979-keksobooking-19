@@ -9,20 +9,9 @@
   var formAdress = mainForm.querySelector('#address');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
   var mapPinWidth = mapPinMain.offsetWidth;
-  var formFieldset = main.querySelectorAll('fieldset');
   var mapForm = main.querySelector('.map__filters');
-  var formSelect = main.querySelectorAll('.map__filter');
   var mapMinX = window.database.mapLimit.left - mapPinWidth / 2;
   var mapMaxX = window.database.mapLimit.right - mapPinWidth / 2;
-
-  var changeFormavAilable = function (option) {
-    for (var q = 0; q < formSelect.length; q++) {
-      formSelect[q].disabled = option;
-    }
-    for (var w = 0; w < formFieldset.length; w++) {
-      formFieldset[w].disabled = option;
-    }
-  };
 
   // ф-ия при успешном сценарии загрузки данных
   var successHandler = function (parameter) {
@@ -55,7 +44,7 @@
   };
 
   // ф-ия при успешной отправки данных
-  var formSuccess = function () {
+  var successFormSubmit = function () {
     main.appendChild(renderSuccessMessage());
     mapPinMain.style = window.constants.PIN_START_COORDS;
     mainForm.reset();
@@ -63,7 +52,7 @@
     recordCoords();
     map.classList.add('map--faded');
     mainForm.classList.add('ad-form--disabled');
-    changeFormavAilable(true);
+    window.form.changeFormavAilable(true);
     var buttons = mapPins.querySelectorAll('.map__pin');
 
     for (var p = 0; p < buttons.length; p++) {
@@ -95,6 +84,11 @@
     errorCreate.querySelector('.error__message').textContent = text;
 
     document.addEventListener('keydown', onErrorCloseField);
+
+    setTimeout(function () {
+      document.addEventListener('click', onErrorCloseField);
+    }, 1000);
+
     errorBtnClose.addEventListener('click', onErrorCloseField);
     return errorCreate;
   };
@@ -125,13 +119,13 @@
     map.classList.remove('map--faded');
     mainForm.classList.remove('ad-form--disabled');
 
-    changeFormavAilable(false);
+    window.form.changeFormavAilable(false);
   };
 
   // слушатель на отправку данных формы
   mainForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(mainForm), formSuccess, errorHandler);
+    window.upload(new FormData(mainForm), successFormSubmit, errorHandler);
   });
 
   // передвижение главного пина
