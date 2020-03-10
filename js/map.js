@@ -12,6 +12,8 @@
   var mapForm = main.querySelector('.map__filters');
   var mapMinX = window.database.mapLimit.left - mapPinWidth / 2;
   var mapMaxX = window.database.mapLimit.right - mapPinWidth / 2;
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var errorCreate = errorTemplate.cloneNode(true);
 
   // ф-ия при успешном сценарии загрузки данных
   var successHandler = function (parameter) {
@@ -72,24 +74,20 @@
       main.removeChild(document.querySelector('.error'));
       document.removeEventListener('keydown', onErrorCloseField);
       document.removeEventListener('click', onErrorCloseField);
+      errorCreate.removeEventListener('click', onErrorCloseField);
     }
   };
 
   // ф-ия отрисовки ошибки
   var renderErrorMesage = function (text) {
-    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-    var errorCreate = errorTemplate.cloneNode(true);
     var errorBtnClose = errorCreate.querySelector('.error__button');
 
     errorCreate.querySelector('.error__message').textContent = text;
 
     document.addEventListener('keydown', onErrorCloseField);
-
-    setTimeout(function () {
-      document.addEventListener('click', onErrorCloseField);
-    }, 1000);
-
+    errorCreate.addEventListener('click', onErrorCloseField);
     errorBtnClose.addEventListener('click', onErrorCloseField);
+
     return errorCreate;
   };
 
