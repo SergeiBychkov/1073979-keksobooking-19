@@ -71,6 +71,10 @@
         mapPins.removeChild(buttons[p]);
       }
     }
+
+    if (document.querySelector('.popup')) {
+      map.removeChild(document.querySelector('.popup'));
+    }
   };
 
   // коллбэк на закрытие окна с ошибкой
