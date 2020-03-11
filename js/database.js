@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var titles = ['Уютное гнездышко для молодоженов', 'Маленькая квартирка рядом с парком', 'Императорский дворец в центре Токио', 'Милейший чердачок', 'Небольшая лавочка в парке', 'Наркоманский притон'];
   var types = ['flat', 'bungalo', 'house', 'palace'];
   var typeOfBuilding = {
     flat: {
@@ -22,9 +21,22 @@
     }
   };
 
+  var coordMainPin = {
+    x: 570,
+    y: 374
+  };
+
+  var mapLimit = {
+    top: 130,
+    right: 1200,
+    bottom: 630,
+    left: 0
+  };
+
   window.database = {
-    titles: titles,
     types: types,
     typeOfBuilding: typeOfBuilding,
+    coordMainPin: coordMainPin,
+    mapLimit: mapLimit
   };
 })();

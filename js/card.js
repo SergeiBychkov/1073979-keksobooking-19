@@ -22,6 +22,29 @@
 
   var renderAd = function (parameter) {
     var adCreate = popup.cloneNode(true);
+    var list = adCreate.querySelector('.popup__features');
+
+
+    parameter.offer.features.forEach(function (currentValue) {
+      var currentElement = document.createElement('li');
+      currentElement.classList.add('popup__feature');
+      currentElement.classList.add('popup__feature--' + currentValue);
+      list.appendChild(currentElement);
+    });
+
+    var renderPhotosCard = function () {
+
+      var photosBlock = adCreate.querySelector('.popup__photos');
+      for (var i = 0; i < parameter.offer.photos.length; i++) {
+        var img = document.createElement('img');
+        photosBlock.appendChild(img);
+        img.classList.add('popup__photo');
+        img.setAttribute('width', '45');
+        img.setAttribute('height', '40');
+        img.setAttribute('alt', '"Фотография жилья');
+        img.setAttribute('src', parameter.offer.photos[i]);
+      }
+    };
 
     adCreate.querySelector('.popup__title').textContent = parameter.offer.title;
     adCreate.querySelector('.popup__text--address').textContent = parameter.offer.adress;
@@ -30,23 +53,12 @@
     adCreate.querySelector('.popup__text--capacity').textContent = parameter.offer.rooms + ' комнаты для ' + parameter.offer.guests + ' гостей';
     adCreate.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ' , выезд до ' + parameter.offer.checkout;
     adCreate.querySelector('.popup__description').textContent = parameter.offer.description;
-    adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[0]);
+
+
     if (parameter.offer.photos.length === 0) {
       adCreate.querySelector('.popup__photos').remove();
     } else {
-      for (var i = 1; i < parameter.offer.photos.length; i++) {
-        var img = adCreate.querySelector('.popup__photo');
-        var imgClone = img.cloneNode();
-        adCreate.querySelector('.popup__photos').appendChild(imgClone);
-        adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[i]);
-      }
-
-      // parameter.forEach(function (currentValue) {
-      //   var img = adCreate.querySelector('.popup__photo');
-      //   var imgClone = img.cloneNode();
-      //   adCreate.querySelector('.popup__photos').appendChild(imgClone);
-      //   adCreate.querySelector('.popup__photo').setAttribute('src', parameter.offer.photos[currentValue]);
-      // });
+      renderPhotosCard();
     }
 
     adCreate.querySelector('.popup__avatar').setAttribute('src', parameter.author.avatar);
