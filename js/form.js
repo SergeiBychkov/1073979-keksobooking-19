@@ -3,6 +3,12 @@
 (function () {
   var mainForm = document.querySelector('.ad-form');
   var roomSelect = mainForm.querySelector('#room_number');
+  var RoomsCapacity = {
+    '1': ['1'],
+    '2': ['1', '2'],
+    '3': ['1', '2', '3'],
+    '100': ['0']
+  };
   var capacitySelect = mainForm.querySelector('#capacity');
   var timein = mainForm.querySelector('#timein');
   var timeout = mainForm.querySelector('#timeout');
@@ -29,7 +35,17 @@
     priceInput.setAttribute('placeholder', price);
   };
 
+  var changeCapacityRange = function () {
+    if (capacitySelect.options.length) {
+      [].forEach.call(capacitySelect.options, function (item) {
+        item.selected = (RoomsCapacity[roomSelect.value][0] === item.value) ? true : false;
+        item.disabled = (RoomsCapacity[roomSelect.value].indexOf(item.value) >= 0) ? false : true;
+      });
+    }
+  };
+
   var checkValue = function () {
+    changeCapacityRange();
     if ((capacitySelect.value <= roomSelect.value) && (capacitySelect.value !== '0') && (roomSelect.value !== '100')) {
       roomSelect.setCustomValidity('');
     } else if ((capacitySelect.value === '0') && (roomSelect.value === '100')) {
