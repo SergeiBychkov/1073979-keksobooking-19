@@ -14,10 +14,12 @@
   var mapMaxX = window.database.mapLimit.right - mapPinWidth / 2;
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var errorCreate = errorTemplate.cloneNode(true);
+  var errorBtnClose = errorCreate.querySelector('.error__button');
+  var fragmentPin = document.createDocumentFragment();
 
   // ф-ия при успешном сценарии загрузки данных
-  var successHandler = function (parameter) {
-    var fragmentPin = document.createDocumentFragment();
+  var onSuccessDownload = function (parameter) {
+    window.data = parameter;
     parameter = parameter.slice(0, quantityOfPins);
 
     parameter.forEach(function (currentValue) {
@@ -45,16 +47,8 @@
     return succesCreate;
   };
 
-  // ф-ия при успешной отправки данных
-  var successFormSubmit = function () {
-    main.appendChild(renderSuccessMessage());
-    mapPinMain.style = window.constants.PIN_START_COORDS;
-    mainForm.reset();
-    mapForm.reset();
-    recordCoords();
-    map.classList.add('map--faded');
-    mainForm.classList.add('ad-form--disabled');
-    window.form.changeFormavAilable(true);
+  // ф-ия удаления пинов с карты
+  var removePins = function () {
     var buttons = mapPins.querySelectorAll('.map__pin');
 
     for (var p = 0; p < buttons.length; p++) {
@@ -62,10 +56,28 @@
         mapPins.removeChild(buttons[p]);
       }
     }
+  };
 
+  // ф-ия удаления попАпа с карты
+  var removePopup = function () {
     if (document.querySelector('.popup')) {
       map.removeChild(document.querySelector('.popup'));
     }
+  };
+
+
+  // ф-ия при успешной отправки данных
+  var successFormSubmit = function () {
+    main.appendChild(renderSuccessMessage());
+    removePins();
+    removePopup();
+    mapPinMain.style = window.constants.PIN_START_COORDS;
+    mainForm.reset();
+    mapForm.reset();
+    recordCoords();
+    map.classList.add('map--faded');
+    mainForm.classList.add('ad-form--disabled');
+    window.form.changeFormavAilable(true);
   };
 
   // коллбэк на закрытие окна с ошибкой
@@ -73,26 +85,23 @@
     if (evt.key === window.constants.ESC || evt.button === 0) {
       main.removeChild(document.querySelector('.error'));
       document.removeEventListener('keydown', onErrorCloseField);
-      document.removeEventListener('click', onErrorCloseField);
       errorCreate.removeEventListener('click', onErrorCloseField);
+      errorBtnClose.removeEventListener('click', onErrorCloseField);
     }
   };
 
   // ф-ия отрисовки ошибки
   var renderErrorMesage = function (text) {
-    var errorBtnClose = errorCreate.querySelector('.error__button');
-
     errorCreate.querySelector('.error__message').textContent = text;
 
     document.addEventListener('keydown', onErrorCloseField);
     errorCreate.addEventListener('click', onErrorCloseField);
     errorBtnClose.addEventListener('click', onErrorCloseField);
-
     return errorCreate;
   };
 
   // ф-ия при ошибке загрузки данных
-  var errorHandler = function (text) {
+  var onError = function (text) {
     main.appendChild(renderErrorMesage(text));
   };
 
@@ -112,18 +121,17 @@
   // ф-ия изменения состояния страницы
   var changePageState = function () {
     if (map.matches('.map--faded')) {
-      window.load(successHandler, errorHandler);
+      window.load(onSuccessDownload, onError);
     }
     map.classList.remove('map--faded');
     mainForm.classList.remove('ad-form--disabled');
-
     window.form.changeFormavAilable(false);
   };
 
   // слушатель на отправку данных формы
   mainForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(mainForm), successFormSubmit, errorHandler);
+    window.upload(new FormData(mainForm), successFormSubmit, onError);
   });
 
   // передвижение главного пина
@@ -189,7 +197,10 @@
   });
 
   window.map = {
+    fragmentPin: fragmentPin,
     onEscPress: onEscPress,
-    recordCoords: recordCoords
+    recordCoords: recordCoords,
+    removePins: removePins,
+    removePopup: removePopup,
   };
 })();

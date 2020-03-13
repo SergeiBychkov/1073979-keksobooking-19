@@ -13,6 +13,7 @@
     map.insertBefore(fragmentCard, mapFiltersContainer);
     document.addEventListener('keydown', window.map.onEscPress);
   };
+
   var removeCard = function () {
     var currMap = document.querySelector('.map');
     var cardPopup = currMap.querySelector('.popup');
