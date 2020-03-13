@@ -78,6 +78,7 @@
     map.classList.add('map--faded');
     mainForm.classList.add('ad-form--disabled');
     window.form.changeFormavAilable(true);
+    window.form.checkCapacity();
   };
 
   // коллбэк на закрытие окна с ошибкой
