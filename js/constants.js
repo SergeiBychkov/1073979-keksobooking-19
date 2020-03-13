@@ -7,7 +7,6 @@
   var PIN_START_COORDS = 'left: 570px; top: 375px';
 
   window.constants = {
-    URL: URL,
     ENTER_KEY: ENTER_KEY,
     ESC: ESC,
     LMB: LMB,

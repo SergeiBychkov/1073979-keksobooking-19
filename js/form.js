@@ -35,17 +35,25 @@
     priceInput.setAttribute('placeholder', price);
   };
 
-  var changeCapacityRange = function () {
-    if (capacitySelect.options.length) {
-      [].forEach.call(capacitySelect.options, function (item) {
-        item.selected = (RoomsCapacity[roomSelect.value][0] === item.value) ? true : false;
-        item.disabled = (RoomsCapacity[roomSelect.value].indexOf(item.value) >= 0) ? false : true;
-      });
-    }
+  var checkCapacity = function () {
+    var validGuestsOptions = RoomsCapacity[roomSelect.value];
+    var guestsOptions = capacitySelect.querySelectorAll('option');
+    guestsOptions.forEach(function (currentOption) {
+      currentOption.disabled = true;
+      currentOption.selected = false;
+      var index = validGuestsOptions.indexOf(currentOption.value);
+      if (index >= 0) {
+        currentOption.disabled = false;
+        if (index === 0) {
+          currentOption.selected = true;
+        }
+      }
+    });
   };
 
-  var checkValue = function () {
-    changeCapacityRange();
+  checkCapacity();
+
+  var validateValue = function () {
     if ((capacitySelect.value <= roomSelect.value) && (capacitySelect.value !== '0') && (roomSelect.value !== '100')) {
       roomSelect.setCustomValidity('');
     } else if ((capacitySelect.value === '0') && (roomSelect.value === '100')) {
@@ -67,7 +75,7 @@
 
   checkType();
 
-  checkValue();
+  validateValue();
 
   typeSelect.addEventListener('change', function () {
     checkType();
@@ -82,11 +90,12 @@
   });
 
   roomSelect.addEventListener('change', function () {
-    checkValue();
+    checkCapacity();
+    validateValue();
   });
 
   capacitySelect.addEventListener('change', function () {
-    checkValue();
+    validateValue();
   });
 
   btnReset.addEventListener('click', function (evt) {
@@ -94,9 +103,11 @@
     mainForm.reset();
     mapPinMain.style = window.constants.PIN_START_COORDS;
     window.map.recordCoords();
+    checkCapacity();
   });
 
   window.form = {
-    changeFormavAilable: changeFormavAilable
+    changeFormavAilable: changeFormavAilable,
+    checkCapacity: checkCapacity
   };
 })();

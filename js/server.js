@@ -2,6 +2,7 @@
 
 (function () {
   var TIMEOUT_IN_MS = 5000;
+
   var requestMethod = {
     load: {
       method: 'GET',
