@@ -1,15 +1,12 @@
 'use strict';
 
 (function () {
-  var PIN_WIDTH = 50;
-
-
   var similarAddPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   var renderPin = function (parameter) {
     var pinCreate = similarAddPinTemplate.cloneNode(true);
 
-    pinCreate.style = 'left:' + (parameter.location.x + PIN_WIDTH / 2) + 'px; top:' + parameter.location.y + 'px;';
+    pinCreate.style = 'left:' + parameter.location.x + 'px; top:' + parameter.location.y + 'px;';
     pinCreate.querySelector('img').setAttribute('src', parameter.author.avatar);
     pinCreate.querySelector('img').setAttribute('alt', parameter.offer.title);
 
@@ -23,7 +20,6 @@
     });
     return pinCreate;
   };
-
 
   window.pin = {
     renderPin: renderPin,

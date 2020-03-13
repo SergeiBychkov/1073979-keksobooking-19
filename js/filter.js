@@ -12,9 +12,10 @@
   var filteredOffers = [];
 
   var onDataCheck = function () {
+    var originalData = window.data;
     if (housingFilters.type.value === 'any') {
-      window.data = window.data.slice(0, quantityOfPins);
-      window.data.forEach(function (currentValue) {
+      originalData = originalData.slice(0, quantityOfPins);
+      originalData.forEach(function (currentValue) {
         window.map.fragmentPin.appendChild(window.pin.renderPin(currentValue));
       });
       mapPins.appendChild(window.map.fragmentPin);
