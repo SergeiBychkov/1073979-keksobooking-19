@@ -11,6 +11,14 @@
     pinCreate.querySelector('img').setAttribute('alt', parameter.offer.title);
 
     pinCreate.addEventListener('click', function () {
+      var activePin = document.querySelector('.map__pin--active');
+
+      pinCreate.classList.add('map__pin--active');
+      if (activePin) {
+        activePin.classList.remove('map__pin--active');
+        pinCreate.classList.add('map__pin--active');
+      }
+
       if (!pinCreate.matches('.map__pin--main')) {
         if (document.querySelector('.popup')) {
           window.card.removeCard();
