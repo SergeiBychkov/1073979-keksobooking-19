@@ -1,8 +1,8 @@
 'use strict';
 
 (function () {
-  var PICTURE_WIDTH = 40;
-  var PICTURE_HEIGHT = 44;
+  var PICTURE_WIDTH = 70;
+  var PICTURE_HEIGHT = 70;
 
   var form = document.querySelector('.ad-form');
   var avatarChooser = form.querySelector('.ad-form-header__input');
