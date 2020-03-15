@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
   var DEBOUNCE_INTERVAL = 500;
 
@@ -47,7 +48,6 @@
         return data.offer.features.includes(featureValue.value);
       });
     };
-
 
     newArray = window.data.filter(checkType).filter(checkPrice).filter(checkRooms).filter(checkGuests).filter(checkFeatures);
 
