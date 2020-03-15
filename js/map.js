@@ -65,7 +65,6 @@
     }
   };
 
-
   // ф-ия при успешной отправки данных
   var successFormSubmit = function () {
     main.appendChild(renderSuccessMessage());

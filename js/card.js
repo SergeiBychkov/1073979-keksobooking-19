@@ -25,7 +25,6 @@
     var adCreate = popup.cloneNode(true);
     var list = adCreate.querySelector('.popup__features');
 
-
     parameter.offer.features.forEach(function (currentValue) {
       var currentElement = document.createElement('li');
       currentElement.classList.add('popup__feature');
