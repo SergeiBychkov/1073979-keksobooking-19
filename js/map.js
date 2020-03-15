@@ -73,6 +73,7 @@
     mapPinMain.style = window.constants.PIN_START_COORDS;
     mainForm.reset();
     mapForm.reset();
+    window.form.resetPhoto();
     recordCoords();
     map.classList.add('map--faded');
     mainForm.classList.add('ad-form--disabled');

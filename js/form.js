@@ -19,6 +19,17 @@
   var mapPinMain = document.querySelector('.map__pin--main');
   var btnReset = mainForm.querySelector('.ad-form__reset');
 
+  var resetPhoto = function () {
+    var avatar = mainForm.querySelector('.ad-form-header__preview img');
+    avatar.src = 'img/muffin-grey.svg';
+
+    var housePhoto = mainForm.querySelector('.ad-form__photo');
+
+    if (housePhoto.querySelector('.ad-form__photo img')) {
+      housePhoto.removeChild(housePhoto.querySelector('.ad-form__photo img'));
+    }
+  };
+
   var changeFormavAilable = function (option) {
     for (var q = 0; q < formSelect.length; q++) {
       formSelect[q].disabled = option;
@@ -104,10 +115,12 @@
     mapPinMain.style = window.constants.PIN_START_COORDS;
     window.map.recordCoords();
     checkCapacity();
+    resetPhoto();
   });
 
   window.form = {
     changeFormavAilable: changeFormavAilable,
-    checkCapacity: checkCapacity
+    checkCapacity: checkCapacity,
+    resetPhoto: resetPhoto
   };
 })();
