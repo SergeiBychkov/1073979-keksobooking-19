@@ -10,8 +10,8 @@
   var mapPinMain = mapPins.querySelector('.map__pin--main');
   var mapPinWidth = mapPinMain.offsetWidth;
   var mapForm = main.querySelector('.map__filters');
-  var mapMinX = window.database.mapLimit.left - mapPinWidth / 2;
-  var mapMaxX = window.database.mapLimit.right - mapPinWidth / 2;
+  var mapMinX = window.database.MAP_LIMIT.left - mapPinWidth / 2;
+  var mapMaxX = window.database.MAP_LIMIT.right - mapPinWidth / 2;
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var errorCreate = errorTemplate.cloneNode(true);
   var errorBtnClose = errorCreate.querySelector('.error__button');
@@ -49,13 +49,14 @@
 
   // ф-ия удаления пинов с карты
   var removePins = function () {
-    var buttons = mapPins.querySelectorAll('.map__pin');
+    var button = mapPins.querySelectorAll('.map__pin');
+    var buttons = Array.from(button);
 
-    for (var p = 0; p < buttons.length; p++) {
-      if (!buttons[p].matches('.map__pin--main')) {
-        mapPins.removeChild(buttons[p]);
+    buttons.forEach(function (currentValue) {
+      if (!currentValue.matches('.map__pin--main')) {
+        mapPins.removeChild(currentValue);
       }
-    }
+    });
   };
 
   // ф-ия удаления попАпа с карты
@@ -79,6 +80,7 @@
     mainForm.classList.add('ad-form--disabled');
     window.form.changeFormavAilable(true);
     window.form.checkCapacity();
+    window.form.checkType();
   };
 
   // коллбэк на закрытие окна с ошибкой
@@ -114,7 +116,7 @@
 
   // ф-ия записи координат в поле Адрес
   var recordCoords = function () {
-    formAdress.value = mapPinMain.offsetLeft + Math.floor(mapPinWidth / 2) + ', ' + mapPinMain.offsetTop;
+    formAdress.value = mapPinMain.offsetLeft + Math.floor(mapPinWidth / 2) + ', ' + (mapPinMain.offsetTop + window.constants.PIN_HEIGHT);
   };
 
   recordCoords();
@@ -157,8 +159,9 @@
         y: moveEvt.clientY
       };
 
-      var shiftCoordY = mapPinMain.offsetTop - shift.y;
       var shiftCoordX = mapPinMain.offsetLeft - shift.x;
+      var shiftCoordY = mapPinMain.offsetTop - shift.y;
+
       var checkCoord = function (min, max, current) {
         if (current < min) {
           return min + 'px';
@@ -169,7 +172,7 @@
         }
       };
 
-      mapPinMain.style.top = checkCoord(window.database.mapLimit.top, window.database.mapLimit.bottom, shiftCoordY);
+      mapPinMain.style.top = checkCoord(window.database.MAP_LIMIT.top, window.database.MAP_LIMIT.bottom, shiftCoordY);
       mapPinMain.style.left = checkCoord(mapMinX, mapMaxX, shiftCoordX);
       recordCoords();
     };

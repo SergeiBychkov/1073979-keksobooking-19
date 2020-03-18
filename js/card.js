@@ -33,23 +33,23 @@
     });
 
     var renderPhotosCard = function () {
-
       var photosBlock = adCreate.querySelector('.popup__photos');
-      for (var i = 0; i < parameter.offer.photos.length; i++) {
+
+      parameter.offer.photos.forEach(function (currentValue) {
         var img = document.createElement('img');
-        photosBlock.appendChild(img);
         img.classList.add('popup__photo');
         img.setAttribute('width', '45');
         img.setAttribute('height', '40');
         img.setAttribute('alt', '"Фотография жилья');
-        img.setAttribute('src', parameter.offer.photos[i]);
-      }
+        img.setAttribute('src', currentValue);
+        photosBlock.appendChild(img);
+      });
     };
 
     adCreate.querySelector('.popup__title').textContent = parameter.offer.title;
     adCreate.querySelector('.popup__text--address').textContent = parameter.offer.adress;
     adCreate.querySelector('.popup__text--price').textContent = parameter.offer.price + '₽/ночь';
-    adCreate.querySelector('.popup__type').textContent = window.database.typeOfBuilding[parameter.offer.type].name;
+    adCreate.querySelector('.popup__type').textContent = window.database.TypeOfBuilding[parameter.offer.type].name;
     adCreate.querySelector('.popup__text--capacity').textContent = parameter.offer.rooms + ' комнаты для ' + parameter.offer.guests + ' гостей';
     adCreate.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ' , выезд до ' + parameter.offer.checkout;
     adCreate.querySelector('.popup__description').textContent = parameter.offer.description;

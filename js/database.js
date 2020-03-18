@@ -1,8 +1,14 @@
 'use strict';
 
 (function () {
-  var types = ['flat', 'bungalo', 'house', 'palace'];
-  var typeOfBuilding = {
+  var MAP_LIMIT = {
+    top: 130 - window.constants.PIN_HEIGHT,
+    right: 1200,
+    bottom: 630 - window.constants.PIN_HEIGHT,
+    left: 0
+  };
+
+  var TypeOfBuilding = {
     flat: {
       name: 'Квартира',
       price: '1000'
@@ -21,22 +27,8 @@
     }
   };
 
-  var coordMainPin = {
-    x: 570,
-    y: 374
-  };
-
-  var mapLimit = {
-    top: 130,
-    right: 1200,
-    bottom: 630,
-    left: 0
-  };
-
   window.database = {
-    types: types,
-    typeOfBuilding: typeOfBuilding,
-    coordMainPin: coordMainPin,
-    mapLimit: mapLimit
+    TypeOfBuilding: TypeOfBuilding,
+    MAP_LIMIT: MAP_LIMIT
   };
 })();

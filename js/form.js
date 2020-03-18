@@ -9,13 +9,17 @@
     '3': ['1', '2', '3'],
     '100': ['0']
   };
+  var mapForm = document.querySelector('.map__filters');
+  var map = document.querySelector('.map');
   var capacitySelect = mainForm.querySelector('#capacity');
   var timein = mainForm.querySelector('#timein');
   var timeout = mainForm.querySelector('#timeout');
   var priceInput = mainForm.querySelector('#price');
   var typeSelect = mainForm.querySelector('#type');
-  var formSelect = document.querySelectorAll('.map__filter');
-  var formFieldset = document.querySelectorAll('fieldset');
+  var formSelectElements = document.querySelectorAll('.map__filter');
+  var formSelects = Array.from(formSelectElements);
+  var formFieldsetElements = document.querySelectorAll('fieldset');
+  var formFieldsets = Array.from(formFieldsetElements);
   var mapPinMain = document.querySelector('.map__pin--main');
   var btnReset = mainForm.querySelector('.ad-form__reset');
 
@@ -31,12 +35,13 @@
   };
 
   var changeFormavAilable = function (option) {
-    for (var q = 0; q < formSelect.length; q++) {
-      formSelect[q].disabled = option;
-    }
-    for (var w = 0; w < formFieldset.length; w++) {
-      formFieldset[w].disabled = option;
-    }
+    formSelects.forEach(function (currentValue) {
+      currentValue.disabled = option;
+    });
+
+    formFieldsets.forEach(function (currentValue) {
+      currentValue.disabled = option;
+    });
   };
 
   changeFormavAilable(true);
@@ -81,7 +86,7 @@
   };
 
   var checkType = function () {
-    setparameters(window.database.typeOfBuilding[typeSelect.value].price);
+    setparameters(window.database.TypeOfBuilding[typeSelect.value].price);
   };
 
   checkType();
@@ -111,16 +116,24 @@
 
   btnReset.addEventListener('click', function (evt) {
     evt.preventDefault();
-    mainForm.reset();
+    window.map.removePins();
+    window.map.removePopup();
     mapPinMain.style = window.constants.PIN_START_COORDS;
-    window.map.recordCoords();
-    checkCapacity();
+    mainForm.reset();
+    mapForm.reset();
     resetPhoto();
+    window.map.recordCoords();
+    map.classList.add('map--faded');
+    mainForm.classList.add('ad-form--disabled');
+    changeFormavAilable(true);
+    checkCapacity();
+    checkType();
   });
 
   window.form = {
     changeFormavAilable: changeFormavAilable,
     checkCapacity: checkCapacity,
-    resetPhoto: resetPhoto
+    resetPhoto: resetPhoto,
+    checkType: checkType
   };
 })();
